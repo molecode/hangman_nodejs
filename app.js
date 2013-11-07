@@ -35,7 +35,13 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/word', function (req, res) {
-	res.send(database.getWord());
+	res.send(database.getWord( req.query.char ));
+});
+app.get('/usedChars', function (req, res) {
+	res.send(database.getUsedChars);
+});
+app.get('/reset', function (req, res) {
+	res.send(database.reset());
 });
 
 http.createServer(app).listen(app.get('port'), function(){

@@ -1,13 +1,19 @@
 <!DOCTYPE html>
-<html ng-app#>
+<html ng-app="hangmanApp">
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
-  <body>
+  <body ng-controller="wordController">
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
 
+    <p>Guess what: {{word}}</p>
+    <input maxlength="1" ng-model="try" /><button ng-click="tryButton()">Send</button>
+    <p>Used characters: {{usedChars}}</p>
+    <!--<p><button ng-click="resetButton()">Reset</button></p>-->
+
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+    <script type="text/javascript" src="javascripts/wordController.js"></script>
   </body>
 </html>
