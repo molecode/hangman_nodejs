@@ -11,6 +11,19 @@ String.prototype.replaceAt=function(index, character) {
     return this.substr(0, index) + character + this.substr(index+character.length);
 }
 
+var getEncryptedWord = function ( word ) {
+	return "_".repeat( word.length );
+}
+
+var getSolution = function ( word, solution, char ) {
+	return 'TODO TODO TODO';
+}
+
+module.exports.getEncryptedWord = getEncryptedWord;
+module.exports.getSolution = getSolution;
+
+// old stuff
+
 var getWord = function ( character ) {
 	if( firstRun ) {
 		firstRun = false;
@@ -34,14 +47,5 @@ var getWord = function ( character ) {
 	}
 };
 
-var reset = function () {
-	delete usedChars;
-	usedChars = {};
-	firstRun = true;
-	solution = "_".repeat( word.length );
-	return solution.split('').join(' ');
-}
-
 module.exports.getWord = getWord;
 module.exports.getUsedChars = usedChars;
-module.exports.reset = reset;

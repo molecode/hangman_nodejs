@@ -4,14 +4,13 @@
  */
 
 var express = require('express');
-var routes = require('./routes');
-var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 
 var app = express();
 
-var database = require('./database.js');
+var word = require('./word.js');
+var database = {};
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -33,15 +32,31 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
+app.get('/', function ( req, res) {
+	var s = req.sessionID;
+	var w = "Bordeaux".toUpperCase();
+	database[s] = {};
+	database[s]['word'] = w;
+	database[s]['solution'] = word.getEncryptedWord( w );
+	database[s]['usedChars'] = new Array();
+	res.render('index', { title: 'Hangman' });
+});
 app.get('/word', function (req, res) {
-	res.send(database.getWord( req.query.char ));
+	var s = req.sessionID;
+	var solution = database[s]['solution'];
+	if( req.query.char ) {
+		var c = req.query.char.toUpperCase();
+		var w = database[s]['word'];
+		if ( c && w.indexOf( c ) == -1 ) {
+			database[s]['usedChars'].push( req.query.char.toUpperCase() );
+		}
+		var solution = word.getSolution( w, solution, c );
+		console.log( database );
+	}
+	res.send( solution.split('').join(' ') );
 });
 app.get('/usedChars', function (req, res) {
-	res.send(database.getUsedChars);
-});
-app.get('/reset', function (req, res) {
-	res.send(database.reset());
+	res.send(word.getUsedChars);
 });
 
 http.createServer(app).listen(app.get('port'), function(){
