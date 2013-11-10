@@ -15,8 +15,20 @@ var getEncryptedWord = function ( word ) {
 	return "_".repeat( word.length );
 }
 
-var getSolution = function ( word, solution, char ) {
-	return 'TODO TODO TODO';
+var getSolution = function ( entry, character ) {
+	var word = entry['word'];
+	var solution = entry['solution'];
+	var indices = [];
+	for( var i=0; i<word.length; i++ ) {
+ 		if ( word[i] === character.toUpperCase() ) indices.push(i);
+	}
+	for( var i in indices ){
+		solution = solution.replaceAt( indices[i], character.toUpperCase() ); 
+	}
+	if( solution.indexOf( "_" ) === -1 ){
+		solution = solution + " ---- HOORAY!"
+	}
+	entry['solution'] = solution;
 }
 
 module.exports.getEncryptedWord = getEncryptedWord;

@@ -32,31 +32,43 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', function ( req, res) {
-	var s = req.sessionID;
+var reset = function ( s ) {
 	var w = "Bordeaux".toUpperCase();
 	database[s] = {};
 	database[s]['word'] = w;
 	database[s]['solution'] = word.getEncryptedWord( w );
 	database[s]['usedChars'] = new Array();
+};
+
+app.get('/', function ( req, res) {
+	var s = req.sessionID;
+	if ( ! database[s] ) {
+		reset( s );
+	}
 	res.render('index', { title: 'Hangman' });
 });
 app.get('/word', function (req, res) {
 	var s = req.sessionID;
-	var solution = database[s]['solution'];
 	if( req.query.char ) {
 		var c = req.query.char.toUpperCase();
 		var w = database[s]['word'];
-		if ( c && w.indexOf( c ) == -1 ) {
-			database[s]['usedChars'].push( req.query.char.toUpperCase() );
+		var u = database[s]['usedChars'];
+		if ( c && w.indexOf( c ) == -1 && u.indexOf( c ) < 0 ) {
+			u.push( req.query.char.toUpperCase() );
+		} else {
+			word.getSolution( database[s], c );
 		}
-		var solution = word.getSolution( w, solution, c );
-		console.log( database );
 	}
-	res.send( solution.split('').join(' ') );
+	console.log( database );
+	res.send( database[s]['solution'].split('').join(' ') );
 });
 app.get('/usedChars', function (req, res) {
-	res.send(word.getUsedChars);
+	res.send( database[req.sessionID]['usedChars'] );
+});
+app.get('/reset', function (req, res) {
+	s = req.sessionID;
+	reset( s );
+	res.send( database[s]['solution'].split('').join(' ') );
 });
 
 http.createServer(app).listen(app.get('port'), function(){
