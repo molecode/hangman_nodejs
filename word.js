@@ -26,38 +26,10 @@ var getSolution = function ( entry, character ) {
 		solution = solution.replaceAt( indices[i], character.toUpperCase() ); 
 	}
 	if( solution.indexOf( "_" ) === -1 ){
-		solution = solution + " ---- HOORAY!"
+		solution = solution + "   ----   HOORAY!"
 	}
 	entry['solution'] = solution;
 }
 
 module.exports.getEncryptedWord = getEncryptedWord;
 module.exports.getSolution = getSolution;
-
-// old stuff
-
-var getWord = function ( character ) {
-	if( firstRun ) {
-		firstRun = false;
-		solution = "_".repeat( word.length );
-		return solution.split('').join(' ');
-	} else{
-		var indices = [];
-		for( var i=0; i<word.length; i++ ) {
-    		if ( word[i] === character.toUpperCase() ) indices.push(i);
-		}
-		if( indices.length == 0 ){
-			usedChars[ character.toUpperCase() ] = true;
-		}
-		for( var i in indices ){
-			solution = solution.replaceAt( indices[i], character.toUpperCase() ); 
-		}
-		if( solution.indexOf( "_" ) === -1 ){
-			solution = solution + " ---- HOORAY!"
-		}
-		return solution.split('').join(' ');
-	}
-};
-
-module.exports.getWord = getWord;
-module.exports.getUsedChars = usedChars;

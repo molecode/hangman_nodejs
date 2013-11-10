@@ -5,7 +5,13 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body ng-controller="wordController">
-    <h1>Welcome to <%= title %></h1><br />
+    <h1>Welcome to <%= title %></h1>
+
+    <h3>
+    <pre>
+    {{hangman}}
+    </pre>
+    </h3>
 
     <p>Guess what: {{word}}</p>
     <input maxlength="1" ng-model="try" /><button ng-click="tryButton()">Send</button>
